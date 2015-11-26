@@ -47,9 +47,10 @@ func (s *BitArray) SetB(pos uint32, val byte) {
 	whichPos := pos % uint32(s.countPerByte)
 	n := byte(whichPos)
 	w := s.valueBitWidth
-	oo := (byte(0xFF<<(8-w)) >> (n * w)) ^ 0xFF
-	zr := s.b[whichByte] & oo         //something like [rr00 rrrr]
-	sr := byte(val<<(8-w)) >> (n * w) // [00ss 0000]
+	nw := n * w
+	oo := ^((byte(1)<<w - 1) << nw)
+	zr := s.b[whichByte] & oo // [rr00 rrrr]
+	sr := val << nw           // [00ss 0000]
 	s.b[whichByte] = zr | sr
 }
 
@@ -62,8 +63,5 @@ func (s *BitArray) GetB(pos uint32) byte {
 	whichPos := pos % uint32(s.countPerByte)
 	n := byte(whichPos)
 	w := s.valueBitWidth
-
-	oo := (byte(0xFF<<(8-w)) >> (n * w)) // 0011 0000
-	oorr := s.b[whichByte] & oo          //00rr 0000
-	return oorr >> (8 - (n+1)*w)
+	return (s.b[whichByte] >> (n * w)) & (1<<w - 1)
 }
