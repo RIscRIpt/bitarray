@@ -33,7 +33,7 @@ func TestBitArray(t *testing.T) {
 	}
 	al := bm.GetAllocLen()
 	fmt.Printf("bm alloc %d bytes. %.2f kb. %.2f mb\n", al, float32(al)/1024, float32(al)*1.0/1024/1024)
-	fmt.Printf("Or just int array will occupied: %d bytes. %.2fkb. %.2fmb\n", mlen*4, float32(mlen)*4/1024, float32(mlen)*4/1024/1024)
+	fmt.Printf("Just an int array would take: %d bytes. %.2fkb. %.2fmb\n", mlen*4, float32(mlen)*4/1024, float32(mlen)*4/1024/1024)
 }
 
 func TestBitArrayLen(t *testing.T) {
