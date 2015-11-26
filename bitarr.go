@@ -28,17 +28,10 @@ func NewBitArray(bitmapLen uint32, valueBitWidth byte) *BitArray {
 }
 
 func (s *BitArray) Init(bitmapLen uint32, valueBitWidth byte) *BitArray {
-	validBitLen := false
-	for i := uint(0); i < 4; i++ {
-		if valueBitWidth == 0x08>>i {
-			validBitLen = true
-			s.countPerByte = 0x08 / valueBitWidth
-			break
-		}
-	}
-	if !validBitLen {
+	if valueBitWidth == 0 || valueBitWidth&(valueBitWidth-1) != 0 || valueBitWidth > 8 {
 		panic("BitArray validBitLen only 1,2,4,8 is supported")
 	}
+	s.countPerByte = 8 / valueBitWidth
 	s.b = make([]byte, bitmapLen/uint32(s.countPerByte)+1)
 	s.bitmapLen = bitmapLen
 	s.valueBitWidth = valueBitWidth
