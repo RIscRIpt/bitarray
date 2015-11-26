@@ -35,3 +35,28 @@ func TestBitArray(t *testing.T) {
 	fmt.Printf("bm alloc %d bytes. %.2f kb. %.2f mb\n", al, float32(al)/1024, float32(al)*1.0/1024/1024)
 	fmt.Printf("Or just int array will occupied: %d bytes. %.2fkb. %.2fmb\n", mlen*4, float32(mlen)*4/1024, float32(mlen)*4/1024/1024)
 }
+
+func TestBitArrayLen(t *testing.T) {
+	validLen := []byte{1, 2, 4, 8}
+	invalidLen := []byte{0, 3, 5, 6, 7, 9, 10}
+	for _, l := range validLen {
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					t.Errorf("paniced on a valid length %d", l)
+				}
+			}()
+			NewBitArray(0, l)
+		}()
+	}
+	for _, l := range invalidLen {
+		func() {
+			defer func() {
+				if r := recover(); r == nil {
+					t.Errorf("didn't panic on an invalid length %d", l)
+				}
+			}()
+			NewBitArray(0, l)
+		}()
+	}
+}
